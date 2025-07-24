@@ -7,6 +7,9 @@ import { Collapse } from "react-collapse";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import { useNavigate } from "react-router-dom";
+
+
 
 const features = [
   {
@@ -64,11 +67,12 @@ const stats = [
 ];
 
 const logos = [
-  "/hospital1.png",
-  "/hospital2.png",
-  "/hospital3.png",
-  "/hospital4.png",
-  "/hospital5.png",
+  // Example SVG hospital logos (you can replace these with your own or use PNGs)
+  "https://freelanceservicesindia.com/wp-content/uploads/2019/07/AIIMS-Logo.png", // AIIMS
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Flag_of_the_Red_Cross.svg/1024px-Flag_of_the_Red_Cross.svg.png", // Red Cross
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7oDObXRQKgJn4WuIiRJkWg7Qb96rpP4tTew&s", // Johns Hopkins
+  "https://logos-world.net/wp-content/uploads/2023/02/Mayo-Clinic-Logo.png", // Mayo Clinic
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiEkWLOxuTRBr5BerbLnSvZSpCt7ij-l0kiA&s", // Cleveland Clinic
 ];
 
 const faqs = [
@@ -151,22 +155,24 @@ function StatsSection() {
 
 function LogoCarousel() {
   return (
-    <section className="relative z-10 py-10 px-6 md:px-20">
+    <section className="relative z-10 py-10 px-3 sm:px-6 md:px-20">
       <Fade direction="up" triggerOnce>
         <h3 className="text-center text-white text-xl mb-6 font-semibold">Trusted By Leading Hospitals</h3>
-        <div className="overflow-hidden">
+        <div className="overflow-x-auto">
           <motion.div
-            className="flex gap-12 animate-scroll"
+            className="flex gap-8 sm:gap-12 items-center animate-scroll"
             style={{ animation: "scroll 18s linear infinite" }}
           >
             {logos.concat(logos).map((logo, i) => (
-              <img
-                key={i}
-                src={logo}
-                alt="Hospital Logo"
-                className="h-12 grayscale hover:grayscale-0 transition"
-                draggable={false}
-              />
+              <div key={i} className="flex-shrink-0 flex flex-col items-center">
+                <img
+                  src={logo}
+                  alt="Hospital Logo"
+                  className="h-10 sm:h-12 md:h-16 grayscale hover:grayscale-0 transition rounded-lg bg-white/30 p-2 shadow"
+                  draggable={false}
+                  style={{ minWidth: "60px", maxWidth: "120px", objectFit: "contain" }}
+                />
+              </div>
             ))}
           </motion.div>
         </div>
@@ -218,12 +224,15 @@ function FAQSection() {
   );
 }
 
-const HomeAdvanced = () => (
-  <div className="min-h-screen bg-gradient-to-tr from-blue-950 via-black to-indigo-900 font-poppins overflow-x-hidden relative">
-    {/* Animated Particles */}
-    <Particles
-      id="tsparticles"
-      className="absolute inset-0 z-0"
+const HomeAdvanced = () => {
+  const navigate = useNavigate();
+
+  return (
+    <div className="min-h-screen w-full bg-gradient-to-tr from-blue-950 via-black to-indigo-900 font-poppins overflow-x-hidden relative">
+      {/* Animated Particles */}
+      <Particles
+        id="tsparticles"
+        className="absolute inset-0 z-0"
       init={async (main) => {
         await loadFull(main);
       }}
@@ -231,78 +240,94 @@ const HomeAdvanced = () => (
         fullScreen: false,
         background: { color: "transparent" },
         particles: {
-          color: { value: "#a78bfa" },
-          links: { enable: true, color: "#38bdf8" },
-          move: { enable: true, speed: 0.5 },
-          number: { value: 30 },
-          opacity: { value: 0.2 },
-          size: { value: 2 },
+          color: { value: "#38bdf8" },
+          links: {
+            enable: true,
+            color: "#38bdf8",
+            distance: 180, // more space between lines
+            opacity: 0.18, // less visible
+            width: 1,
+            shadow: {
+              enable: true,
+              color: "#38bdf8",
+              blur: 4, // less blur
+            },
+          },
+          move: { enable: true, speed: 0.7 },
+          number: { value: 35, density: { enable: true, area: 900 } }, // fewer particles
+          opacity: { value: 0.18, random: true },
+          size: { value: 2, random: true },
+          shape: { type: ["circle", "line"] },
         },
+        detectRetina: true,
       }}
     />
 
     {/* Glassmorphic Navbar */}
     <motion.nav
+      className="fixed top-0 left-0 w-full z-50 px-3 sm:px-6 md:px-12 py-3 sm:py-5 flex flex-wrap justify-between items-center bg-white/10 backdrop-blur-xl shadow-lg rounded-b-3xl border-b border-white/10"
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, type: "spring" }}
-      className="fixed top-0 left-0 w-full z-50 px-8 py-5 flex justify-between items-center bg-white/10 backdrop-blur-xl shadow-lg rounded-b-3xl border-b border-white/10"
     >
-      <span className="text-3xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-500 text-transparent bg-clip-text tracking-tight drop-shadow-lg">
+      <span className="text-xl sm:text-2xl md:text-4xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-500 text-transparent bg-clip-text tracking-tight drop-shadow-lg whitespace-nowrap">
         MediSync 360
       </span>
-      <div className="flex gap-4">
-        <motion.button
-          whileHover={{ scale: 1.08 }}
-          className="px-5 py-2 rounded-xl text-sm bg-white/20 hover:bg-white/30 transition font-semibold shadow"
-        >
-          Login
-        </motion.button>
-        <motion.button
-          whileHover={{ scale: 1.08 }}
-          className="px-5 py-2 rounded-xl text-sm bg-blue-500 hover:bg-blue-600 transition font-semibold shadow text-white"
-        >
-          Sign Up
-        </motion.button>
-      </div>
+ <div className="flex flex-wrap gap-2 sm:gap-4">
+  <motion.button
+    whileHover={{ scale: 1.08 }}
+    onClick={() => navigate("/login")}
+    className="px-4 py-2 rounded-xl text-xs sm:text-sm bg-white/20 hover:bg-white/30 transition font-semibold shadow whitespace-nowrap"
+  >
+    Login
+  </motion.button>
+  <motion.button
+    whileHover={{ scale: 1.08 }}
+    onClick={() => navigate("/signup")}
+    className="px-4 py-2 rounded-xl text-xs sm:text-sm bg-blue-500 hover:bg-blue-600 transition font-semibold shadow text-white whitespace-nowrap"
+  >
+    Sign Up
+  </motion.button>
+</div>
+
     </motion.nav>
 
-    {/* Hero Section with Parallax & 3D */}
-    <section className="pt-44 pb-24 text-center relative overflow-hidden">
+    {/* Hero Section */}
+    <section className="pt-28 sm:pt-44 pb-10 sm:pb-20 text-center relative overflow-hidden">
       <FloatingIcons />
       <Fade direction="down" triggerOnce>
         <motion.h1
+          className="text-2xl sm:text-4xl md:text-7xl font-extrabold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 text-transparent bg-clip-text drop-shadow-2xl break-words"
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 1.2, type: "spring" }}
-          className="text-6xl md:text-8xl font-extrabold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 text-transparent bg-clip-text drop-shadow-2xl"
         >
           <span className="block">Reimagine</span>
           <span className="block">Healthcare</span>
         </motion.h1>
         <motion.p
+          className="text-xs sm:text-base md:text-xl text-gray-200 mt-4 sm:mt-8 max-w-xs sm:max-w-lg md:max-w-2xl mx-auto break-words"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 1 }}
-          className="text-xl md:text-2xl text-gray-200 mt-8 max-w-2xl mx-auto"
         >
-          3D dashboards, glassmorphic UI, and AI-powered care. Welcome to the future of health.
+          {/* 3D dashboards, glassmorphic UI, and AI-powered care. Welcome to the future of health. */}
         </motion.p>
         <motion.div
+          className="mt-6 sm:mt-10 flex flex-col sm:flex-row justify-center gap-2 sm:gap-6 flex-wrap"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 1 }}
-          className="mt-10 flex justify-center gap-6"
         >
           <motion.button
             whileHover={{ scale: 1.1, boxShadow: "0 0 30px #38bdf8" }}
-            className="bg-blue-500 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-lg"
+            className="bg-blue-500 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-2xl font-bold text-base sm:text-lg shadow-lg whitespace-nowrap"
           >
             Get Started
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.1, boxShadow: "0 0 30px #a78bfa" }}
-            className="border border-white/20 bg-white/10 hover:bg-white/20 px-8 py-4 rounded-2xl font-bold text-lg shadow-lg text-white"
+            className="border border-white/20 bg-white/10 hover:bg-white/20 px-6 py-3 sm:px-8 sm:py-4 rounded-2xl font-bold text-base sm:text-lg shadow-lg text-white whitespace-nowrap"
           >
             <i className="fas fa-magic mr-2"></i> Live Preview
           </motion.button>
@@ -348,13 +373,13 @@ const HomeAdvanced = () => (
     {/* Logo Carousel */}
     <LogoCarousel />
 
-    {/* Features with 3D Tilt and Glassmorphism */}
-    <section className="relative z-10 py-24 px-6 md:px-20">
+    {/* Features Section */}
+    <section className="relative z-10 py-10 sm:py-20 px-3 sm:px-6 md:px-20">
       <Fade direction="up" triggerOnce>
-        <h2 className="text-4xl font-bold text-center mb-16 text-white drop-shadow-lg">
+        <h2 className="text-xl sm:text-3xl md:text-4xl font-bold text-center mb-6 sm:mb-12 text-white drop-shadow-lg">
           Key Features
         </h2>
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           {features.map((f, i) => (
             <Tilt
               key={f.title}
@@ -368,10 +393,10 @@ const HomeAdvanced = () => (
                 whileHover={{ scale: 1.07, y: -10 }}
                 className={`bg-gradient-to-br ${f.color} p-1 rounded-3xl shadow-2xl`}
               >
-                <div className="bg-white/20 backdrop-blur-xl rounded-3xl p-8 min-h-[260px] flex flex-col items-center justify-center glass-card border border-white/10">
-                  <i className={`${f.icon} text-5xl mb-6 text-white drop-shadow-lg`} />
-                  <h3 className="text-2xl font-bold mb-2 text-white">{f.title}</h3>
-                  <p className="text-gray-100 text-center">{f.desc}</p>
+                <div className="bg-white/20 backdrop-blur-xl rounded-3xl p-6 sm:p-8 min-h-[180px] sm:min-h-[220px] flex flex-col items-center justify-center glass-card border border-white/10">
+                  <i className={`${f.icon} text-3xl sm:text-5xl mb-4 sm:mb-6 text-white drop-shadow-lg`} />
+                  <h3 className="text-lg sm:text-2xl font-bold mb-1 sm:mb-2 text-white text-center break-words">{f.title}</h3>
+                  <p className="text-gray-100 text-xs sm:text-base text-center break-words">{f.desc}</p>
                 </div>
               </motion.div>
             </Tilt>
@@ -380,24 +405,24 @@ const HomeAdvanced = () => (
       </Fade>
     </section>
 
-    {/* Parallax CTA */}
-    <section className="relative z-10 py-24 px-6 md:px-20">
+    {/* CTA Section */}
+    <section className="relative z-10 py-10 sm:py-20 px-3 sm:px-6 md:px-20">
       <Zoom triggerOnce>
         <motion.div
           initial={{ scale: 0.95, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 1 }}
           transition={{ duration: 1.1, type: "spring" }}
-          className="bg-gradient-to-r from-purple-900 via-indigo-900 to-blue-900 rounded-3xl shadow-2xl p-16 text-center glass-card border border-white/10"
+          className="bg-gradient-to-r from-purple-900 via-indigo-900 to-blue-900 rounded-3xl shadow-2xl p-8 sm:p-16 text-center glass-card border border-white/10"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white drop-shadow-lg">
+          <h2 className="text-xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-white drop-shadow-lg break-words">
             Get Started With MediSync Today
           </h2>
-          <p className="text-gray-200 max-w-2xl mx-auto mb-8 text-lg">
+          <p className="text-gray-200 max-w-xs sm:max-w-xl md:max-w-2xl mx-auto mb-4 sm:mb-8 text-xs sm:text-lg break-words">
             Trusted by clinics and hospitals worldwide for smarter, faster outcomes.
           </p>
           <motion.button
             whileHover={{ scale: 1.08, boxShadow: "0 0 30px #38bdf8" }}
-            className="bg-blue-500 px-10 py-4 text-white text-lg rounded-2xl font-bold shadow-lg"
+            className="bg-blue-500 px-6 py-3 sm:px-10 sm:py-4 text-white text-base sm:text-lg rounded-2xl font-bold shadow-lg whitespace-nowrap"
           >
             Request a Demo
           </motion.button>
@@ -405,22 +430,22 @@ const HomeAdvanced = () => (
       </Zoom>
     </section>
 
-    {/* Testimonials with Scroll Animations */}
-    <section className="relative z-10 py-24 px-6 md:px-20">
+    {/* Testimonials Section */}
+    <section className="relative z-10 py-10 sm:py-20 px-3 sm:px-6 md:px-20">
       <Slide direction="up" triggerOnce>
-        <h2 className="text-4xl font-bold text-center mb-16 text-white drop-shadow-lg">
+        <h2 className="text-xl sm:text-4xl font-bold text-center mb-6 sm:mb-12 text-white drop-shadow-lg">
           What They Say
         </h2>
-        <div className="grid md:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-10">
           {testimonials.map((t, i) => (
             <motion.div
               key={i}
               whileHover={{ scale: 1.04, y: -6 }}
-              className="bg-white/10 border border-white/10 p-8 rounded-3xl glass-card shadow-xl"
+              className="bg-white/10 border border-white/10 p-6 sm:p-8 rounded-3xl glass-card shadow-xl"
             >
-              <p className="mb-6 text-gray-100 italic text-lg">“{t.quote}”</p>
-              <h4 className="font-bold text-blue-400">{t.name}</h4>
-              <p className="text-sm text-gray-300">{t.role}</p>
+              <p className="mb-4 sm:mb-6 text-gray-100 italic text-xs sm:text-lg break-words">“{t.quote}”</p>
+              <h4 className="font-bold text-blue-400 text-xs sm:text-base">{t.name}</h4>
+              <p className="text-xs sm:text-sm text-gray-300">{t.role}</p>
             </motion.div>
           ))}
         </div>
@@ -430,13 +455,13 @@ const HomeAdvanced = () => (
     {/* FAQ Section */}
     <FAQSection />
 
-    {/* Footer with Glassmorphism and Socials */}
-    <footer className="relative z-10 px-8 md:px-20 py-16 mt-20 bg-white/10 backdrop-blur-xl rounded-t-3xl border-t border-white/10 text-gray-200 shadow-2xl">
-      <div className="flex flex-col md:flex-row justify-between gap-10">
-        <div>
-          <h4 className="text-white font-semibold text-2xl">MediSync 360</h4>
-          <p className="text-sm mt-2">Revolutionizing care with secure, intelligent health tech.</p>
-          <div className="flex gap-4 text-2xl mt-4">
+    {/* Footer Section */}
+    <footer className="relative z-10 px-3 sm:px-8 md:px-20 py-6 sm:py-16 mt-6 sm:mt-20 bg-white/10 backdrop-blur-xl rounded-t-3xl border-t border-white/10 text-gray-200 shadow-2xl">
+      <div className="flex flex-col md:flex-row justify-between gap-4 sm:gap-10">
+        <div className="min-w-0">
+          <h4 className="text-white font-semibold text-lg sm:text-2xl">MediSync 360</h4>
+          <p className="text-xs sm:text-sm mt-2 break-words">Revolutionizing care with secure, intelligent health tech.</p>
+          <div className="flex gap-2 sm:gap-4 text-lg sm:text-2xl mt-4 flex-wrap">
             {social.map((s, i) => (
               <a
                 key={i}
@@ -450,17 +475,19 @@ const HomeAdvanced = () => (
             ))}
           </div>
         </div>
-        <div>
-          <h4 className="text-white font-semibold mb-2">Support</h4>
-          <p>Email: support@medisync360.com</p>
-          <p>Phone: +91-9876543210</p>
+        <div className="min-w-0">
+          <h4 className="text-white font-semibold mb-2 text-lg sm:text-xl">Support</h4>
+          <p className="text-xs sm:text-sm break-words">Email: support@medisync360.com</p>
+          <p className="text-xs sm:text-sm break-words">Phone: +91-9876543210</p>
         </div>
       </div>
-      <p className="text-center mt-10 text-sm text-gray-400">
+      <p className="text-center mt-4 sm:mt-10 text-xs sm:text-sm text-gray-400 break-words">
         &copy; 2025 MediSync 360. All rights reserved.
       </p>
     </footer>
   </div>
 );
+
+}
 
 export default HomeAdvanced;
